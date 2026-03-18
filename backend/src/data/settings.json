@@ -1,0 +1,8 @@
+{
+  "defaultPlaylistUrl": "",
+  "downloadPath": "",
+  "downloadConfig": {
+    "audioQuality": 0,
+    "wantLyrics": true
+  }
+}

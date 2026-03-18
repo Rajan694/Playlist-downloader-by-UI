@@ -1,18 +1,21 @@
 {
-  "name": "backend",
+  "name": "playlist-downloader-backend",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "src/index.js",
   "scripts": {
-    "dev": "nodemon src/index.js"
+    "dev": "nodemon src/index.js",
+    "start": "node src/index.js"
   },
   "author": "",
   "license": "ISC",
-  "description": "",
+  "description": "Backend API for YouTube playlist downloader",
   "dependencies": {
+    "cors": "^2.8.5",
     "dotenv": "^17.3.1",
-    "eslint": "^10.0.3",
+    "express": "^5.1.0",
     "genius-lyrics": "^4.4.7",
     "node-id3": "^0.2.6",
+    "uuid": "^11.1.0",
     "yt-dlp-exec": "^1.0.2"
   },
   "devDependencies": {
