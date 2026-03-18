@@ -14,6 +14,7 @@ const MAX_HISTORY = 5;
 const DEFAULT_SETTINGS = {
   defaultPlaylistUrl: '',
   downloadPath: getDefaultDownloadPath(),
+  theme: 'glassmorphic',
   downloadConfig: {
     audioQuality: 0, // yt-dlp quality 0 = best, 10 = worst
     wantLyrics: true,

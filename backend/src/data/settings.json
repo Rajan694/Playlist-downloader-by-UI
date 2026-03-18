@@ -1,6 +1,7 @@
 {
   "defaultPlaylistUrl": "",
   "downloadPath": "",
+  "theme": "glassmorphic",
   "downloadConfig": {
     "audioQuality": 0,
     "wantLyrics": true
