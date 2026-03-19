@@ -5,12 +5,12 @@ import { PlaylistDropdown } from '../components/ui/PlaylistDropdown';
 import { Button } from '../components/ui/Button';
 import { Card, CardContent, CardHeader, CardTitle, CardFooter } from '../components/ui/Card';
 import { ProgressBar } from '../components/ui/ProgressBar';
-import { 
-  getSettings, 
-  getPlaylistInfo, 
-  startDownload, 
+import {
+  getSettings,
+  getPlaylistInfo,
+  startDownload,
   cancelDownload,
-  createProgressEventSource 
+  createProgressEventSource,
 } from '../services/api';
 
 export const Home = () => {
@@ -18,43 +18,45 @@ export const Home = () => {
   const [defaultUrl, setDefaultUrl] = useState('');
   const [loading, setLoading] = useState(false);
   const [playlistData, setPlaylistData] = useState(null);
-  
+
   const [jobId, setJobId] = useState(null);
   const [progressData, setProgressData] = useState({});
   const [jobStatus, setJobStatus] = useState(null); // 'running', 'completed', 'error', 'cancelled'
 
   useEffect(() => {
-    getSettings().then(s => s?.defaultPlaylistUrl && setDefaultUrl(s.defaultPlaylistUrl));
+    getSettings().then((s) => s?.defaultPlaylistUrl && setDefaultUrl(s.defaultPlaylistUrl));
   }, []);
 
   useEffect(() => {
     if (!jobId) return;
 
     const sse = createProgressEventSource(jobId);
-    
     sse.onmessage = (event) => {
       try {
         const data = JSON.parse(event.data);
         if (data.type === 'progress') {
-          setProgressData(prev => ({
+          setProgressData((prev) => ({
             ...prev,
-            [data.itemId]: { percent: data.percent, status: data.status, title: data.title }
+            [data.itemId]: {
+              percent: data.percent,
+              status: data.status,
+              title: data.title,
+            },
           }));
         } else if (data.type === 'done' || data.type === 'cancelled') {
           setJobStatus(data.status);
           sse.close();
+        } else if (data.type === 'error') {
+          // Optional: store/display the message
+          console.error('Download job error:', data.message);
+          setJobStatus('error');
+          sse.close();
         }
       } catch (e) {
-        console.error("SSE parse error", e);
+        console.error('SSE parse error', e);
       }
     };
-
-    sse.onerror = () => {
-      sse.close();
-      setJobStatus('error');
-    };
-
-    return () => sse.close();
+    // return () => sse.close();
   }, [jobId]);
 
   const fetchPlaylist = async (targetUrl) => {
@@ -63,7 +65,7 @@ export const Home = () => {
     setJobId(null);
     setProgressData({});
     setJobStatus(null);
-    
+
     try {
       const data = await getPlaylistInfo(targetUrl);
       setPlaylistData(data);
@@ -90,13 +92,13 @@ export const Home = () => {
       const res = await startDownload({
         playlistUrl: url,
         items: playlistData.missing,
-        playlistTitle: playlistData.title
+        playlistTitle: playlistData.title,
       });
       setJobId(res.jobId);
       setJobStatus('running');
     } catch (e) {
       console.error(e);
-      alert("Failed to start download");
+      alert('Failed to start download');
     }
   };
 
@@ -113,10 +115,13 @@ export const Home = () => {
           <CardContent className="pt-6">
             <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center">
               <div className="flex-1 w-full">
-                <PlaylistDropdown 
-                  value={url} 
-                  onChange={setUrl} 
-                  onSelect={(u) => { setUrl(u); fetchPlaylist(u); }} 
+                <PlaylistDropdown
+                  value={url}
+                  onChange={setUrl}
+                  onSelect={(u) => {
+                    setUrl(u);
+                    fetchPlaylist(u);
+                  }}
                 />
               </div>
               <div className="flex gap-2 w-full sm:w-auto">
@@ -124,7 +129,12 @@ export const Home = () => {
                   {loading ? 'Fetching...' : 'Fetch Info'}
                 </Button>
                 {defaultUrl && (
-                  <Button variant="outline" onClick={handleUseDefault} disabled={loading} className="flex-1 sm:flex-none whitespace-nowrap">
+                  <Button
+                    variant="outline"
+                    onClick={handleUseDefault}
+                    disabled={loading}
+                    className="flex-1 sm:flex-none whitespace-nowrap"
+                  >
                     Use Default
                   </Button>
                 )}
@@ -146,8 +156,12 @@ export const Home = () => {
               <CardHeader>
                 <CardTitle className="text-xl">{playlistData.title}</CardTitle>
                 <div className="flex items-center gap-4 text-sm text-text-muted mt-2">
-                  <span className="flex items-center gap-1"><FiFolder /> {playlistData.downloadPath}</span>
-                  <span className="flex items-center gap-1"><FiClock /> {playlistData.totalItems} Items ({playlistData.estimatedSizeMb} MB est.)</span>
+                  <span className="flex items-center gap-1">
+                    <FiFolder /> {playlistData.downloadPath}
+                  </span>
+                  <span className="flex items-center gap-1">
+                    <FiClock /> {playlistData.totalItems} Items ({playlistData.estimatedSizeMb} MB est.)
+                  </span>
                 </div>
               </CardHeader>
 
@@ -172,13 +186,15 @@ export const Home = () => {
                       Pending Downloads ({playlistData.missing.length})
                     </div>
                     <ul className="max-h-64 overflow-y-auto divide-y divide-border-main">
-                      {playlistData.missing.map(item => {
+                      {playlistData.missing.map((item) => {
                         const prog = progressData[item.id];
                         return (
                           <li key={item.id} className="p-4 flex flex-col gap-2 transition-colors hover:bg-base-surface">
                             <div className="flex justify-between items-center text-sm">
                               <span className="font-medium text-text-main line-clamp-1 flex-1 pr-4">{item.title}</span>
-                              <span className={`text-xs ml-auto whitespace-nowrap capitalize ${prog?.status === 'complete' ? 'text-green-500 font-bold' : prog?.status === 'failed' ? 'text-red-500 font-bold' : 'text-text-muted'}`}>
+                              <span
+                                className={`text-xs ml-auto whitespace-nowrap capitalize ${prog?.status === 'complete' ? 'text-green-500 font-bold' : prog?.status === 'failed' ? 'text-red-500 font-bold' : 'text-text-muted'}`}
+                              >
                                 {prog ? prog.status : 'Pending...'}
                               </span>
                             </div>
@@ -195,8 +211,14 @@ export const Home = () => {
                 <CardFooter className="bg-base-surface border-t border-border-main p-4 sm:px-6 rounded-b-xl flex flex-col sm:flex-row items-center justify-between gap-4">
                   <div className="text-sm text-text-muted font-medium w-full sm:w-auto text-center sm:text-left">
                     {jobStatus === 'running' && <span className="text-accent-main animate-pulse">Downloading...</span>}
-                    {jobStatus === 'completed' && <span className="text-green-500 flex items-center justify-center sm:justify-start gap-1"><FiCheckCircle /> All Complete!</span>}
-                    {jobStatus === 'error' && <span className="text-red-500">Finished with some errors. Corrupt files deleted.</span>}
+                    {jobStatus === 'completed' && (
+                      <span className="text-green-500 flex items-center justify-center sm:justify-start gap-1">
+                        <FiCheckCircle /> All Complete!
+                      </span>
+                    )}
+                    {jobStatus === 'error' && (
+                      <span className="text-red-500">Finished with some errors. Corrupt files deleted.</span>
+                    )}
                     {jobStatus === 'cancelled' && <span className="text-orange-500">Download Cancelled.</span>}
                     {!jobStatus && <span>Ready to start</span>}
                   </div>
@@ -206,7 +228,11 @@ export const Home = () => {
                         Cancel Job
                       </Button>
                     ) : (
-                      <Button onClick={handleStartDownload} className="w-full sm:w-auto gap-2" disabled={!!jobStatus && jobStatus !== 'cancelled' && jobStatus !== 'error'}>
+                      <Button
+                        onClick={handleStartDownload}
+                        className="w-full sm:w-auto gap-2"
+                        disabled={!!jobStatus && jobStatus !== 'cancelled' && jobStatus !== 'error'}
+                      >
                         <FiDownload /> Start Download
                       </Button>
                     )}

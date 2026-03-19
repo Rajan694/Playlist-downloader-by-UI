@@ -1,8 +1,7 @@
-'use strict';
+import dotenv from 'dotenv';
+import app from './app.js';
 
-require('dotenv').config();
-
-const app = require('./app');
+dotenv.config();
 
 const PORT = process.env.PORT || 5000;
 

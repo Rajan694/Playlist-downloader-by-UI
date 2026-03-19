@@ -1,14 +1,11 @@
-'use strict';
-
-const fs = require('fs').promises;
-const fsConstants = require('fs').constants;
+import { promises as fs, constants as fsConstants } from 'fs';
 
 /**
  * Checks whether a directory path exists and is writable.
  * @param {string} dirPath - Absolute path to validate.
  * @returns {Promise<{valid: boolean, reason?: string}>}
  */
-async function validatePath(dirPath) {
+export const validatePath = async (dirPath) => {
   if (!dirPath || typeof dirPath !== 'string') {
     return { valid: false, reason: 'Path is required' };
   }
@@ -29,6 +26,4 @@ async function validatePath(dirPath) {
     }
     return { valid: false, reason: err.message };
   }
-}
-
-module.exports = { validatePath };
+};

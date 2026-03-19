@@ -1,14 +1,12 @@
-'use strict';
-
-const ytDlp = require('yt-dlp-exec');
+import ytDlp from 'yt-dlp-exec';
 
 /**
  * Fetches the title of a single YouTube video via yt-dlp.
  * @param {string} videoUrl - Full YouTube video URL.
  * @returns {Promise<string>} Resolved video title.
  */
-function getVideoTitle(videoUrl) {
-  return new Promise((resolve, reject) => {
+export const getVideoTitle = (videoUrl) =>
+  new Promise((resolve, reject) => {
     const subprocess = ytDlp.exec(videoUrl, {
       getTitle: true,
       quiet: true,
@@ -27,6 +25,3 @@ function getVideoTitle(videoUrl) {
 
     subprocess.on('error', reject);
   });
-}
-
-module.exports = { getVideoTitle };

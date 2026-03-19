@@ -1,8 +1,6 @@
-'use strict';
-
-const { getPlaylistInfo } = require('../services/playlist.service');
-const { findExistingIds, estimateTotalSizeMb } = require('../utils/fileScan');
-const { getSettings } = require('../services/settings.service');
+import { getPlaylistInfo } from '../services/playlist.service.js';
+import { findExistingIds, estimateTotalSizeMb } from '../utils/fileScan.js';
+import { getSettings } from '../services/settings.service.js';
 
 /**
  * GET /api/playlist/info?url=<playlist_url>&downloadPath=<optional>
@@ -10,7 +8,7 @@ const { getSettings } = require('../services/settings.service');
  * Fetches playlist info, compares against the download folder,
  * and returns existing/missing breakdown with estimated size.
  */
-async function info(req, res) {
+export const info = async (req, res) => {
   const { url, downloadPath: queryPath } = req.query;
 
   if (!url) {
@@ -48,6 +46,4 @@ async function info(req, res) {
     existing,
     missing,
   });
-}
-
-module.exports = { info };
+};

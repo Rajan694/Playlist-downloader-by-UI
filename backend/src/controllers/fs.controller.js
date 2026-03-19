@@ -1,12 +1,10 @@
-'use strict';
-
-const { validatePath } = require('../utils/validatePath');
+import { validatePath } from '../utils/validatePath.js';
 
 /**
  * GET /api/fs/validate?path=<dir>
  * Checks if a directory exists and is writable.
  */
-async function validate(req, res) {
+export const validate = async (req, res) => {
   const dirPath = req.query.path;
 
   if (!dirPath) {
@@ -15,6 +13,4 @@ async function validate(req, res) {
 
   const result = await validatePath(dirPath);
   res.json(result);
-}
-
-module.exports = { validate };
+};

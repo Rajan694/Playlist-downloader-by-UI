@@ -1,19 +1,15 @@
-'use strict';
-
-const {
+import {
   getHistory,
   removeFromHistory,
-} = require('../services/settings.service');
+} from '../services/settings.service.js';
 
-async function list(req, res) {
+export const list = async (req, res) => {
   const history = await getHistory();
   res.json(history);
-}
+};
 
-async function remove(req, res) {
+export const remove = async (req, res) => {
   const { id } = req.params;
   const updated = await removeFromHistory(id);
   res.json(updated);
-}
-
-module.exports = { list, remove };
+};

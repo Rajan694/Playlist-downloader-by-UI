@@ -1,6 +1,4 @@
-'use strict';
-
-const fs = require('fs').promises;
+import { promises as fs } from 'fs';
 
 const AVERAGE_BITRATE_KBPS = 192;
 const SAFETY_FACTOR = 1.25;
@@ -10,17 +8,17 @@ const SAFETY_FACTOR = 1.25;
  * @param {Array<{duration: number}>} entries
  * @returns {number} Estimated size in MB.
  */
-function estimateTotalSizeMb(entries) {
+export const estimateTotalSizeMb = (entries) => {
   const totalSeconds = entries.reduce((sum, e) => sum + (e.duration || 0), 0);
   const totalBytes = totalSeconds * ((AVERAGE_BITRATE_KBPS * 1000) / 8) * SAFETY_FACTOR;
   return totalBytes / (1024 * 1024);
-}
+};
 
 /**
  * Scans `targetDir` for .mp3 files whose name contains a YouTube video ID,
  * and partitions `playlistItems` into existing / missing arrays.
  */
-async function findExistingIds(targetDir, playlistItems) {
+export const findExistingIds = async (targetDir, playlistItems) => {
   let files = [];
   try {
     files = await fs.readdir(targetDir);
@@ -46,6 +44,4 @@ async function findExistingIds(targetDir, playlistItems) {
   }
 
   return { existing, missing };
-}
-
-module.exports = { estimateTotalSizeMb, findExistingIds };
+};

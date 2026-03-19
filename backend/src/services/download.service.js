@@ -1,12 +1,10 @@
-'use strict';
-
-const path = require('path');
-const fs = require('fs').promises;
-const { EventEmitter } = require('events');
-const ytDlp = require('yt-dlp-exec');
-const { formatFileName } = require('../utils/formatFileName');
-const { getVideoTitle } = require('../utils/getVideoTitle');
-const { embedLyricsIfPossible } = require('./lyrics.service');
+import path from 'path';
+import { promises as fs } from 'fs';
+import { EventEmitter } from 'events';
+import ytDlp from 'yt-dlp-exec';
+import { formatFileName } from '../utils/formatFileName.js';
+import { getVideoTitle } from '../utils/getVideoTitle.js';
+import { embedLyricsIfPossible } from './lyrics.service.js';
 
 /**
  * DownloadManager — manages multiple download jobs.
@@ -260,4 +258,4 @@ class DownloadManager extends EventEmitter {
 // Singleton instance shared across the app
 const downloadManager = new DownloadManager();
 
-module.exports = { downloadManager };
+export { downloadManager };

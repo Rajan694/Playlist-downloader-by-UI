@@ -1,8 +1,10 @@
-'use strict';
+import dotenv from 'dotenv';
+import { createRequire } from 'module';
+import { formatFileName } from '../utils/formatFileName.js';
 
-const { formatFileName } = require('../utils/formatFileName');
+dotenv.config();
 
-require('dotenv').config();
+const require = createRequire(import.meta.url);
 let NodeID3 = null;
 let geniusClient = null;
 
@@ -28,7 +30,7 @@ try {
  * @param {string} fileName - Cleaned file name used as the search query.
  * @param {string} finalFilePath - Absolute path to the finished .mp3 file.
  */
-async function embedLyricsIfPossible(fileName, finalFilePath) {
+export const embedLyricsIfPossible = async (fileName, finalFilePath) => {
   if (!NodeID3 || !geniusClient) return;
   if (!fileName) return;
 
@@ -51,6 +53,4 @@ async function embedLyricsIfPossible(fileName, finalFilePath) {
   } catch (err) {
     console.error('Warning: failed to fetch/embed lyrics:', err.message || err);
   }
-}
-
-module.exports = { embedLyricsIfPossible };
+};

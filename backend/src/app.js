@@ -1,14 +1,12 @@
-'use strict';
+import express from 'express';
+import cors from 'cors';
 
-const express = require('express');
-const cors = require('cors');
-
-const settingsRoutes = require('./routes/settings.routes');
-const historyRoutes = require('./routes/history.routes');
-const playlistRoutes = require('./routes/playlist.routes');
-const downloadRoutes = require('./routes/download.routes');
-const fsRoutes = require('./routes/fs.routes');
-const { errorHandler } = require('./middleware/errorHandler');
+import settingsRoutes from './routes/settings.routes.js';
+import historyRoutes from './routes/history.routes.js';
+import playlistRoutes from './routes/playlist.routes.js';
+import downloadRoutes from './routes/download.routes.js';
+import fsRoutes from './routes/fs.routes.js';
+import { errorHandler } from './middleware/errorHandler.js';
 
 const app = express();
 
@@ -31,4 +29,4 @@ app.get('/api/health', (req, res) => {
 // ──────────────── Error handler (must be last) ────────────────
 app.use(errorHandler);
 
-module.exports = app;
+export default app;

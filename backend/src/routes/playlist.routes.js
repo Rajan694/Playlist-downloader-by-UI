@@ -1,11 +1,9 @@
-'use strict';
-
-const { Router } = require('express');
-const ctrl = require('../controllers/playlist.controller');
-const { asyncWrap } = require('../middleware/asyncWrap');
+import { Router } from 'express';
+import * as ctrl from '../controllers/playlist.controller.js';
+import { asyncWrap } from '../middleware/asyncWrap.js';
 
 const router = Router();
 
 router.get('/info', asyncWrap(ctrl.info));
 
-module.exports = router;
+export default router;

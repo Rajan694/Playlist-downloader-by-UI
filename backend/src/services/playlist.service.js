@@ -1,13 +1,11 @@
-'use strict';
-
-const ytDlp = require('yt-dlp-exec');
+import ytDlp from 'yt-dlp-exec';
 
 /**
  * Fetches full playlist metadata from YouTube via yt-dlp.
  * @param {string} url - YouTube playlist URL.
  * @returns {Promise<{title: string, items: Array}>}
  */
-async function getPlaylistInfo(url) {
+export const getPlaylistInfo = async (url) => {
   const result = await ytDlp(url, {
     dumpSingleJson: true,
     skipDownload: true,
@@ -48,6 +46,4 @@ async function getPlaylistInfo(url) {
       };
     }),
   };
-}
-
-module.exports = { getPlaylistInfo };
+};

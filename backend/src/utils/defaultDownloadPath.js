@@ -1,14 +1,8 @@
-'use strict';
-
-const path = require('path');
-const os = require('os');
+import path from 'path';
+import os from 'os';
 
 /**
  * Returns the OS-specific default Downloads folder path.
  * Falls back to the user's home directory if detection fails.
  */
-function getDefaultDownloadPath() {
-  return path.join(os.homedir(), 'Downloads');
-}
-
-module.exports = { getDefaultDownloadPath };
+export const getDefaultDownloadPath = () => path.join(os.homedir(), 'Downloads');

@@ -1,12 +1,6 @@
-'use strict';
-
-const { v4: uuidv4 } = require('uuid');
-const { downloadManager } = require('../services/download.service');
-const {
-  getSettings,
-  addToHistory,
-  updateSettings,
-} = require('../services/settings.service');
+import { v4 as uuidv4 } from 'uuid';
+import { downloadManager } from '../services/download.service.js';
+import { getSettings, addToHistory, updateSettings } from '../services/settings.service.js';
 
 /**
  * POST /api/download/start
@@ -14,7 +8,7 @@ const {
  *
  * Starts a background download job and returns the jobId.
  */
-async function start(req, res) {
+export const start = async (req, res) => {
   const { playlistUrl, downloadPath: bodyPath, items, playlistTitle } = req.body;
 
   if (!items || !items.length) {
@@ -41,17 +35,31 @@ async function start(req, res) {
   }
 
   res.json({ jobId });
-}
+};
 
 /**
  * GET /api/download/progress/:jobId
  * Server-Sent Events stream — emits real-time progress events.
  */
-function progress(req, res) {
+export const progress = (req, res) => {
   const { jobId } = req.params;
+  const wantsSse = (req.headers.accept || '').includes('text/event-stream');
 
   const job = downloadManager.getJobStatus(jobId);
   if (!job) {
+    // If this is an SSE client (EventSource), send an SSE error event
+    // so the frontend can read the message instead of a bare 404.
+    if (wantsSse) {
+      res.writeHead(200, {
+        'Content-Type': 'text/event-stream',
+        'Cache-Control': 'no-cache',
+        Connection: 'keep-alive',
+      });
+      res.write(`data: ${JSON.stringify({ type: 'error', message: 'Job not found' })}\n\n`);
+      res.end();
+      return;
+    }
+
     return res.status(404).json({ error: true, message: 'Job not found' });
   }
 
@@ -78,13 +86,13 @@ function progress(req, res) {
   req.on('close', () => {
     downloadManager.removeListener(jobId, onEvent);
   });
-}
+};
 
 /**
  * DELETE /api/download/cancel/:jobId
  * Cancels a running download job.
  */
-function cancel(req, res) {
+export const cancel = (req, res) => {
   const { jobId } = req.params;
   const cancelled = downloadManager.cancelJob(jobId);
 
@@ -93,13 +101,13 @@ function cancel(req, res) {
   }
 
   res.json({ message: 'Job cancelled' });
-}
+};
 
 /**
  * GET /api/download/status/:jobId
  * Poll-based alternative to SSE — returns current job state snapshot.
  */
-function status(req, res) {
+export const status = (req, res) => {
   const { jobId } = req.params;
   const job = downloadManager.getJobStatus(jobId);
 
@@ -108,6 +116,4 @@ function status(req, res) {
   }
 
   res.json(job);
-}
-
-module.exports = { start, progress, cancel, status };
+};

@@ -1,21 +1,17 @@
-'use strict';
+import { getSettings, updateSettings } from '../services/settings.service.js';
+import { getDefaultDownloadPath } from '../utils/defaultDownloadPath.js';
 
-const { getSettings, updateSettings } = require('../services/settings.service');
-const { getDefaultDownloadPath } = require('../utils/defaultDownloadPath');
-
-async function get(req, res) {
+export const get = async (req, res) => {
   const settings = await getSettings();
   res.json(settings);
-}
+};
 
-async function update(req, res) {
+export const update = async (req, res) => {
   const updated = await updateSettings(req.body);
   res.json(updated);
-}
+};
 
-async function defaultPath(req, res) {
+export const defaultPath = async (req, res) => {
   const downloadPath = getDefaultDownloadPath();
   res.json({ downloadPath });
-}
-
-module.exports = { get, update, defaultPath };
+};
