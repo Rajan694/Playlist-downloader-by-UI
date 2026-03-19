@@ -1,7 +1,7 @@
 {
   "defaultPlaylistUrl": "https://youtube.com/playlist?list=PLIIfCgZ6D3Xur62nhLuocH5u07jpPYYPd&si=H4BAV3lSw2Db7ecf",
   "downloadPath": "/home/rajan/Downloads",
-  "theme": "glassmorphic",
+  "theme": "normal",
   "downloadConfig": {
     "audioQuality": 5,
     "wantLyrics": true

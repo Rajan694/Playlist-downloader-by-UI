@@ -56,7 +56,7 @@ export const Home = () => {
         console.error('SSE parse error', e);
       }
     };
-    // return () => sse.close();
+    return () => sse.close();
   }, [jobId]);
 
   const fetchPlaylist = async (targetUrl) => {
@@ -125,7 +125,7 @@ export const Home = () => {
                 />
               </div>
               <div className="flex gap-2 w-full sm:w-auto">
-                <Button onClick={handleFetch} disabled={!url || loading} className="flex-1 sm:flex-none">
+                <Button onClick={handleFetch} disabled={false} className="flex-1 sm:flex-none">
                   {loading ? 'Fetching...' : 'Fetch Info'}
                 </Button>
                 {defaultUrl && (
