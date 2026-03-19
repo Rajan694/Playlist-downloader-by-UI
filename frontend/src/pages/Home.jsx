@@ -12,6 +12,7 @@ import {
   cancelDownload,
   createProgressEventSource,
 } from '../services/api';
+import { useTheme } from '../context/ThemeContext';
 
 export const Home = () => {
   const [url, setUrl] = useState('');
@@ -22,6 +23,8 @@ export const Home = () => {
   const [jobId, setJobId] = useState(null);
   const [progressData, setProgressData] = useState({});
   const [jobStatus, setJobStatus] = useState(null); // 'running', 'completed', 'error', 'cancelled'
+
+  const { themeConfig } = useTheme();
 
   useEffect(() => {
     getSettings().then((s) => s?.defaultPlaylistUrl && setDefaultUrl(s.defaultPlaylistUrl));
@@ -155,7 +158,7 @@ export const Home = () => {
             <Card>
               <CardHeader>
                 <CardTitle className="text-xl">{playlistData.title}</CardTitle>
-                <div className="flex items-center gap-4 text-sm text-text-muted mt-2">
+                <div className={`flex items-center gap-4 text-sm mt-2 ${themeConfig.textMuted}`}>
                   <span className="flex items-center gap-1">
                     <FiFolder /> {playlistData.downloadPath}
                   </span>
@@ -167,33 +170,33 @@ export const Home = () => {
 
               <CardContent className="space-y-4">
                 <div className="space-y-2">
-                  <h4 className="font-semibold text-sm uppercase tracking-wider text-text-secondary">Summary</h4>
+                  <h4 className={`font-semibold text-sm uppercase tracking-wider ${themeConfig.textSecondary}`}>Summary</h4>
                   <div className="grid grid-cols-2 gap-4">
-                    <div className="bg-base-surface border border-border-main p-4 rounded-lg flex flex-col items-center justify-center">
+                    <div className={`border p-4 rounded-lg flex flex-col items-center justify-center ${themeConfig.dropdownContainer}`}>
                       <span className="text-3xl font-bold text-green-500">{playlistData.existing.length}</span>
-                      <span className="text-sm text-text-muted">Already downloaded</span>
+                      <span className={`text-sm ${themeConfig.textMuted}`}>Already downloaded</span>
                     </div>
-                    <div className="bg-base-surface border border-border-main p-4 rounded-lg flex flex-col items-center justify-center">
-                      <span className="text-3xl font-bold text-accent-main">{playlistData.missing.length}</span>
-                      <span className="text-sm text-text-muted">Ready to download</span>
+                    <div className={`border p-4 rounded-lg flex flex-col items-center justify-center ${themeConfig.dropdownContainer}`}>
+                      <span className={`text-3xl font-bold ${themeConfig.textAccent}`}>{playlistData.missing.length}</span>
+                      <span className={`text-sm ${themeConfig.textMuted}`}>Ready to download</span>
                     </div>
                   </div>
                 </div>
 
                 {playlistData.missing.length > 0 && (
-                  <div className="mt-6 border border-border-main rounded-lg overflow-hidden bg-base-bg">
-                    <div className="bg-base-strong px-4 py-2 text-sm font-semibold text-text-secondary border-b border-border-main">
+                  <div className={`mt-6 border ${themeConfig.dropdownContainer} overflow-hidden`}>
+                    <div className={`px-4 py-2 text-sm font-semibold border-b ${themeConfig.dropdownHeader}`}>
                       Pending Downloads ({playlistData.missing.length})
                     </div>
-                    <ul className="max-h-64 overflow-y-auto divide-y divide-border-main">
+                    <ul className={`max-h-64 overflow-y-auto divide-y ${themeConfig.dropdownHeader}`}>
                       {playlistData.missing.map((item) => {
                         const prog = progressData[item.id];
                         return (
-                          <li key={item.id} className="p-4 flex flex-col gap-2 transition-colors hover:bg-base-surface">
+                          <li key={item.id} className={`p-4 flex flex-col gap-2 transition-colors ${themeConfig.dropdownItem}`}>
                             <div className="flex justify-between items-center text-sm">
-                              <span className="font-medium text-text-main line-clamp-1 flex-1 pr-4">{item.title}</span>
+                              <span className={`font-medium line-clamp-1 flex-1 pr-4 ${themeConfig.dropdownTextMain}`}>{item.title}</span>
                               <span
-                                className={`text-xs ml-auto whitespace-nowrap capitalize ${prog?.status === 'complete' ? 'text-green-500 font-bold' : prog?.status === 'failed' ? 'text-red-500 font-bold' : 'text-text-muted'}`}
+                                className={`text-xs ml-auto whitespace-nowrap capitalize ${prog?.status === 'complete' ? 'text-green-500 font-bold' : prog?.status === 'failed' ? 'text-red-500 font-bold' : themeConfig.textMuted}`}
                               >
                                 {prog ? prog.status : 'Pending...'}
                               </span>
@@ -208,9 +211,9 @@ export const Home = () => {
               </CardContent>
 
               {playlistData.missing.length > 0 && (
-                <CardFooter className="bg-base-surface border-t border-border-main p-4 sm:px-6 rounded-b-xl flex flex-col sm:flex-row items-center justify-between gap-4">
-                  <div className="text-sm text-text-muted font-medium w-full sm:w-auto text-center sm:text-left">
-                    {jobStatus === 'running' && <span className="text-accent-main animate-pulse">Downloading...</span>}
+                <CardFooter className="flex flex-col sm:flex-row items-center justify-between gap-4">
+                  <div className={`text-sm font-medium w-full sm:w-auto text-center sm:text-left ${themeConfig.textMuted}`}>
+                    {jobStatus === 'running' && <span className={`${themeConfig.textAccent} animate-pulse`}>Downloading...</span>}
                     {jobStatus === 'completed' && (
                       <span className="text-green-500 flex items-center justify-center sm:justify-start gap-1">
                         <FiCheckCircle /> All Complete!

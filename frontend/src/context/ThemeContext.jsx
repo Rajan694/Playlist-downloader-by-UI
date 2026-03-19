@@ -1,5 +1,6 @@
 import { createContext, useContext, useEffect, useState } from 'react';
 import { getSettings, updateSettings } from '../services/api';
+import { themeConfigs } from '../theme/themeConfigs';
 
 const ThemeContext = createContext();
 
@@ -20,15 +21,13 @@ export const ThemeProvider = ({ children }) => {
   }, []);
 
   useEffect(() => {
-    // Remove old themes
-    document.body.classList.remove('theme-normal', 'theme-dark', 'theme-vintage', 'theme-glassmorphic');
+    // Remove all classes
+    document.body.className = '';
     
-    // Add new theme class
-    document.body.classList.add(`theme-${theme}`);
-    
-    // Optional: map normal to light mode specifically, or let Tailwind default to base
-    if (theme === 'normal') document.body.classList.add('theme-normal');
-
+    // Add new theme classes
+    const currentConfig = themeConfigs[theme] || themeConfigs.normal;
+    document.body.className = `${currentConfig.appBackground} antialiased`;
+    document.body.style.fontFamily = "'Inter', system-ui, sans-serif";
   }, [theme]);
 
   const changeTheme = async (newTheme) => {
@@ -43,7 +42,7 @@ export const ThemeProvider = ({ children }) => {
   if (loading) return null; // Or a stealthy loader
 
   return (
-    <ThemeContext.Provider value={{ theme, changeTheme }}>
+    <ThemeContext.Provider value={{ theme, changeTheme, themeConfig: themeConfigs[theme] || themeConfigs.normal }}>
       {children}
     </ThemeContext.Provider>
   );

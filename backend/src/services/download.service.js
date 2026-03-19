@@ -177,7 +177,7 @@ class DownloadManager extends EventEmitter {
     const outputTemplate = path.join(outputDir, `${fileName} [%(id)s].%(ext)s`);
     const finalFilePath = path.join(outputDir, `${fileName} [${item.id}].mp3`);
 
-    const audioQuality = config.audioQuality ?? 0;
+    const audioQuality = config.audioQuality ?? 5;
     const wantLyrics = config.wantLyrics !== false;
 
     return new Promise((resolve, reject) => {

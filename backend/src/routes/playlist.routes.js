@@ -4,6 +4,6 @@ import { asyncWrap } from '../middleware/asyncWrap.js';
 
 const router = Router();
 
-router.get('/info', asyncWrap(ctrl.info));
+router.get('/info', asyncWrap(ctrl.info)); //getInfo of playlist
 
 export default router;

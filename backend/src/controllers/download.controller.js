@@ -46,7 +46,6 @@ export const progress = (req, res) => {
   const wantsSse = (req.headers.accept || '').includes('text/event-stream');
 
   const job = downloadManager.getJobStatus(jobId);
-  console.log('🚀 ~ progress ~ job:', job);
   if (!job) {
     // If this is an SSE client (EventSource), send an SSE error event
     // so the frontend can read the message instead of a bare 404.

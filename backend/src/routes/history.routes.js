@@ -4,7 +4,7 @@ import { asyncWrap } from '../middleware/asyncWrap.js';
 
 const router = Router();
 
-router.get('/', asyncWrap(ctrl.list));
-router.delete('/:id', asyncWrap(ctrl.remove));
+router.get('/', asyncWrap(ctrl.list)); //get recent used playlists
+router.delete('/:id', asyncWrap(ctrl.remove)); //delete a playlist
 
 export default router;

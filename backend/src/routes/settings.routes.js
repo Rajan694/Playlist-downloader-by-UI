@@ -4,8 +4,8 @@ import { asyncWrap } from '../middleware/asyncWrap.js';
 
 const router = Router();
 
-router.get('/', asyncWrap(ctrl.get));
-router.put('/', asyncWrap(ctrl.update));
-router.get('/default-download-path', asyncWrap(ctrl.defaultPath));
+router.get('/', asyncWrap(ctrl.get)); //get settings
+router.put('/', asyncWrap(ctrl.update)); //update settings
+router.get('/default-download-path', asyncWrap(ctrl.defaultPath)); //gets default path
 
 export default router;

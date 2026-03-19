@@ -4,6 +4,6 @@ import { asyncWrap } from '../middleware/asyncWrap.js';
 
 const router = Router();
 
-router.get('/validate', asyncWrap(ctrl.validate));
+router.get('/validate', asyncWrap(ctrl.validate)); //validate path entered
 
 export default router;

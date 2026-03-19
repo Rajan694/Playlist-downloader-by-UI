@@ -8,6 +8,12 @@ export const getSettings = () => api.get('/settings').then(res => res.data);
 export const updateSettings = (data) => api.put('/settings', data).then(res => res.data);
 export const getDefaultDownloadPath = () => api.get('/settings/default-download-path').then(res => res.data.downloadPath);
 
+// Validate a filesystem path (directory + writable) from the backend
+export const validateDownloadPath = (path) =>
+  api
+    .get('/fs/validate', { params: { path } })
+    .then(res => res.data);
+
 export const getHistory = () => api.get('/history').then(res => res.data);
 export const deleteHistory = (id) => api.delete(`/history/${id}`).then(res => res.data);
 
