@@ -7,7 +7,7 @@ const ThemeContext = createContext();
 export const useTheme = () => useContext(ThemeContext);
 
 export const ThemeProvider = ({ children }) => {
-  const [theme, setTheme] = useState('glassmorphic');
+  const [theme, setTheme] = useState('dark');
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -23,9 +23,9 @@ export const ThemeProvider = ({ children }) => {
   useEffect(() => {
     // Remove all classes
     document.body.className = '';
-    
+
     // Add new theme classes
-    const currentConfig = themeConfigs[theme] || themeConfigs.normal;
+    const currentConfig = themeConfigs[theme] || themeConfigs.dark;
     document.body.className = `${currentConfig.appBackground} antialiased`;
     document.body.style.fontFamily = "'Inter', system-ui, sans-serif";
   }, [theme]);
@@ -42,7 +42,7 @@ export const ThemeProvider = ({ children }) => {
   if (loading) return null; // Or a stealthy loader
 
   return (
-    <ThemeContext.Provider value={{ theme, changeTheme, themeConfig: themeConfigs[theme] || themeConfigs.normal }}>
+    <ThemeContext.Provider value={{ theme, changeTheme, themeConfig: themeConfigs[theme] || themeConfigs.dark }}>
       {children}
     </ThemeContext.Provider>
   );

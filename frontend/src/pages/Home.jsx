@@ -1,9 +1,8 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { FiFolder, FiCheckCircle, FiClock, FiDownload } from 'react-icons/fi';
+import { FiFolder, FiCheckCircle, FiClock, FiDownload, FiSettings, FiMusic } from 'react-icons/fi';
 import { PlaylistDropdown } from '../components/ui/PlaylistDropdown';
 import { Button } from '../components/ui/Button';
-import { Card, CardContent, CardHeader, CardTitle, CardFooter } from '../components/ui/Card';
 import { ProgressBar } from '../components/ui/ProgressBar';
 import {
   getSettings,
@@ -114,37 +113,53 @@ export const Home = () => {
   return (
     <div className="w-full max-w-4xl mx-auto space-y-6 pt-4 pb-12">
       <motion.div initial={{ y: -20, opacity: 0 }} animate={{ y: 0, opacity: 1 }}>
-        <Card>
-          <CardContent className="pt-6">
-            <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center">
-              <div className="flex-1 w-full">
-                <PlaylistDropdown
-                  value={url}
-                  onChange={setUrl}
-                  onSelect={(u) => {
-                    setUrl(u);
-                    fetchPlaylist(u);
-                  }}
-                />
-              </div>
-              <div className="flex gap-2 w-full sm:w-auto">
-                <Button onClick={handleFetch} disabled={false} className="flex-1 sm:flex-none">
-                  {loading ? 'Fetching...' : 'Fetch Info'}
-                </Button>
-                {defaultUrl && (
-                  <Button
-                    variant="outline"
-                    onClick={handleUseDefault}
-                    disabled={loading}
-                    className="flex-1 sm:flex-none whitespace-nowrap"
-                  >
-                    Use Default
-                  </Button>
-                )}
-              </div>
+        <div>
+          <div className="flex justify-end">
+            <Button
+              to="/settings"
+              className={`p-2 text-slate-400 hover:text-white bg-slate 200 hover:bg-slate-800 rounded-xl transition-colors group`}
+              title="Settings"
+              id="settingsButton"
+            >
+              <FiSettings className="w-6 h-6 group-hover:rotate-90 transition-transform duration-500" />
+            </Button>
+          </div>
+          <div className="flex items-center justify-center p-2 bg-slate-900/50 rounded-2xl mb-6 shadow-xl backdrop-blur-md">
+            <FiMusic className="w-8 h-8 text-purple-400 mr-3" />
+            <h3
+              id="mainTitle"
+              className="text-3xl font-bold bg-linear-to-r from-purple-400 to-blue-400 bg-clip-text text-transparent tracking-tight"
+            >
+              Playlist Downloader
+            </h3>
+          </div>
+          <p id="titleDescription" className="text-slate-400 text-lg max-w-xl mx-auto mb-10 text-center">
+            Transform any YouTube playlist into high-quality MP3s instantly. Paste the link below to get started.
+          </p>
+          <div className="mt-6 flex gap-2 justify-center">
+            <div
+              className={`flex gap-2 bg-slate-900 border border-slate-800 rounded-2xl shadow-2xl p-2 transition-all duration-300 focus-within:border-purple-500/50 focus-within:ring-2 focus-within:ring-purple-500/20`}
+              id="inputPlaylist"
+            >
+              <PlaylistDropdown
+                value={url}
+                onChange={setUrl}
+                onSelect={(u) => {
+                  setUrl(u);
+                  fetchPlaylist(u);
+                }}
+              />
+              <Button onClick={handleFetch} disabled={false} className="m-1 w-fit text-nowrap">
+                {loading ? 'Fetching...' : 'Fetch Info'}
+              </Button>
             </div>
-          </CardContent>
-        </Card>
+            {defaultUrl && (
+              <Button variant="outline" onClick={handleUseDefault} disabled={loading} className=" whitespace-nowrap">
+                Use Default
+              </Button>
+            )}
+          </div>
+        </div>
       </motion.div>
 
       <AnimatePresence mode="wait">
@@ -155,9 +170,9 @@ export const Home = () => {
             animate={{ y: 0, opacity: 1 }}
             exit={{ y: -20, opacity: 0 }}
           >
-            <Card>
-              <CardHeader>
-                <CardTitle className="text-xl">{playlistData.title}</CardTitle>
+            <div className="bg-[#1e293b] text-[#f8fafc] shadow-md border border-[#334155] rounded-xl">
+              <div className="flex flex-col space-y-1.5 p-6">
+                <div className="text-2xl font-semibold leading-none tracking-tight">{playlistData.title}</div>
                 <div className={`flex items-center gap-4 text-sm mt-2 ${themeConfig.textMuted}`}>
                   <span className="flex items-center gap-1">
                     <FiFolder /> {playlistData.downloadPath}
@@ -166,18 +181,26 @@ export const Home = () => {
                     <FiClock /> {playlistData.totalItems} Items ({playlistData.estimatedSizeMb} MB est.)
                   </span>
                 </div>
-              </CardHeader>
+              </div>
 
-              <CardContent className="space-y-4">
+              <div className="p-6 pt-0 space-y-4">
                 <div className="space-y-2">
-                  <h4 className={`font-semibold text-sm uppercase tracking-wider ${themeConfig.textSecondary}`}>Summary</h4>
+                  <h4 className={`font-semibold text-sm uppercase tracking-wider ${themeConfig.textSecondary}`}>
+                    Summary
+                  </h4>
                   <div className="grid grid-cols-2 gap-4">
-                    <div className={`border p-4 rounded-lg flex flex-col items-center justify-center ${themeConfig.dropdownContainer}`}>
+                    <div
+                      className={`border p-4 rounded-lg flex flex-col items-center justify-center ${themeConfig.dropdownContainer}`}
+                    >
                       <span className="text-3xl font-bold text-green-500">{playlistData.existing.length}</span>
                       <span className={`text-sm ${themeConfig.textMuted}`}>Already downloaded</span>
                     </div>
-                    <div className={`border p-4 rounded-lg flex flex-col items-center justify-center ${themeConfig.dropdownContainer}`}>
-                      <span className={`text-3xl font-bold ${themeConfig.textAccent}`}>{playlistData.missing.length}</span>
+                    <div
+                      className={`border p-4 rounded-lg flex flex-col items-center justify-center ${themeConfig.dropdownContainer}`}
+                    >
+                      <span className={`text-3xl font-bold ${themeConfig.textAccent}`}>
+                        {playlistData.missing.length}
+                      </span>
                       <span className={`text-sm ${themeConfig.textMuted}`}>Ready to download</span>
                     </div>
                   </div>
@@ -192,9 +215,14 @@ export const Home = () => {
                       {playlistData.missing.map((item) => {
                         const prog = progressData[item.id];
                         return (
-                          <li key={item.id} className={`p-4 flex flex-col gap-2 transition-colors ${themeConfig.dropdownItem}`}>
+                          <li
+                            key={item.id}
+                            className={`p-4 flex flex-col gap-2 transition-colors ${themeConfig.dropdownItem}`}
+                          >
                             <div className="flex justify-between items-center text-sm">
-                              <span className={`font-medium line-clamp-1 flex-1 pr-4 ${themeConfig.dropdownTextMain}`}>{item.title}</span>
+                              <span className={`font-medium line-clamp-1 flex-1 pr-4 ${themeConfig.dropdownTextMain}`}>
+                                {item.title}
+                              </span>
                               <span
                                 className={`text-xs ml-auto whitespace-nowrap capitalize ${prog?.status === 'complete' ? 'text-green-500 font-bold' : prog?.status === 'failed' ? 'text-red-500 font-bold' : themeConfig.textMuted}`}
                               >
@@ -208,12 +236,16 @@ export const Home = () => {
                     </ul>
                   </div>
                 )}
-              </CardContent>
+              </div>
 
               {playlistData.missing.length > 0 && (
-                <CardFooter className="flex flex-col sm:flex-row items-center justify-between gap-4">
-                  <div className={`text-sm font-medium w-full sm:w-auto text-center sm:text-left ${themeConfig.textMuted}`}>
-                    {jobStatus === 'running' && <span className={`${themeConfig.textAccent} animate-pulse`}>Downloading...</span>}
+                <div className=" flex items-center p-6 pt-0 bg-[#1e293b] border-t border-[#334155] rounded-b-xl  flex-col sm:flex-row  justify-between gap-4">
+                  <div
+                    className={`text-sm font-medium w-full sm:w-auto text-center sm:text-left ${themeConfig.textMuted}`}
+                  >
+                    {jobStatus === 'running' && (
+                      <span className={`${themeConfig.textAccent} animate-pulse`}>Downloading...</span>
+                    )}
                     {jobStatus === 'completed' && (
                       <span className="text-green-500 flex items-center justify-center sm:justify-start gap-1">
                         <FiCheckCircle /> All Complete!
@@ -240,9 +272,9 @@ export const Home = () => {
                       </Button>
                     )}
                   </div>
-                </CardFooter>
+                </div>
               )}
-            </Card>
+            </div>
           </motion.div>
         )}
       </AnimatePresence>

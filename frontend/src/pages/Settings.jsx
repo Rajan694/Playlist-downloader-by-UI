@@ -1,18 +1,12 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Card, CardHeader, CardTitle, CardContent, CardFooter } from '../components/ui/Card';
 import { Button } from '../components/ui/Button';
 import { useTheme } from '../context/ThemeContext';
 import { getSettings, updateSettings, getDefaultDownloadPath, validateDownloadPath } from '../services/api';
 import { FiSave, FiFolder, FiMonitor, FiMusic } from 'react-icons/fi';
 import { cn } from '../utils/cn';
 
-const THEME_OPTIONS = [
-  { id: 'normal', label: 'Light (Normal)' },
-  { id: 'dark', label: 'Dark Mode' },
-  { id: 'vintage', label: 'Vintage / Sepia' },
-  { id: 'glassmorphic', label: 'Glassmorphic' },
-];
+const THEME_OPTIONS = [{ id: 'dark', label: 'Dark Mode' }];
 
 export const Settings = () => {
   const { theme, changeTheme, themeConfig } = useTheme();
@@ -107,14 +101,14 @@ export const Settings = () => {
       animate={{ opacity: 1, scale: 1 }}
       className="w-full max-w-2xl mx-auto pt-4 pb-12"
     >
-      <Card>
-        <CardHeader>
-          <CardTitle>Application Settings</CardTitle>
+      <div className="bg-[#1e293b] text-[#f8fafc] shadow-md border border-[#334155] rounded-xl">
+        <div className="flex flex-col space-y-1.5 p-6">
+          <div className="text-2xl font-semibold leading-none tracking-tight">Application Settings</div>
           <p className={`text-sm ${themeConfig.textMuted}`}>Configure default paths, theme, and audio quality.</p>
-        </CardHeader>
+        </div>
 
         <form onSubmit={handleSave}>
-          <CardContent className="space-y-6">
+          <div className="p-6 pt-0 space-y-6">
             {/* Download Settings */}
             <div className={`space-y-4 border-b ${themeConfig.dropdownHeader} pb-6`}>
               <h4
@@ -252,15 +246,15 @@ export const Settings = () => {
                 Clicking a theme applies it instantly across the whole app.
               </p>
             </div>
-          </CardContent>
-          <CardFooter className="flex items-center justify-between rounded-b-xl border-t pt-6">
+          </div>
+          <div className=" p-6  bg-[#1e293b]  border-[#334155] flex items-center justify-between rounded-b-xl border-t pt-6">
             <span className="text-green-500 text-sm font-semibold">{successMsg}</span>
             <Button type="submit" disabled={saving} className="gap-2">
               <FiSave /> {saving ? 'Saving...' : 'Save Settings'}
             </Button>
-          </CardFooter>
+          </div>
         </form>
-      </Card>
+      </div>
     </motion.div>
   );
 };
